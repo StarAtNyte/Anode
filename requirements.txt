@@ -1,0 +1,8 @@
+revChatGPT
+fpdf
+replicate
+PyPDF2
+stability-sdk
+youtube_dl
+requests
+setuptools
