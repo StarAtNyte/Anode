@@ -2,6 +2,7 @@
 
 
 
+
 ## Inspiration
 
 Novels and stories bring joy to all people, be it a 7-year-old child or a 70-year-old person. Some stories have a very special place in our hearts: the stories that we heard from our grandparents. Some stories we find on the internet and immediately fall in love with. Sometimes we want to hear more stories like these, but we can't, maybe because we have lost the source or there simply aren't any. These stories that bring us joy inspired us to create "A Novel Idea (Anode)". 
