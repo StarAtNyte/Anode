@@ -32,7 +32,6 @@ summary_pdf = PDF()
 
 
 st.title('Create A Illustrated Novel From a simple Title')
-st.image("https://imageio.forbes.com/blogs-images/bernardmarr/files/2019/03/AdobeStock_235115918-1200x800.jpeg?format=jpg&width=1200")
 st.text('''
 Please follow the following instructions:
 1. Press all the buttons in order.
@@ -98,7 +97,8 @@ chapters = st.number_input('Enter Number of chapters.', min_value=1, max_value=1
 complete_text =''
 ## PDF Body
 if st.button('Get PDF'):
-    st.write('Processing')
+    st.write('Writing Your Storyy.')
+    st.markdown("![Writing Your Story](https://media.giphy.com/media/YAnpMSHcurJVS/giphy.gif)")
 
     text = []
     response = chatbot.ask( f"Generate 10 chapter titles for the novel {title}")
@@ -195,13 +195,3 @@ if st.button('Get PDF'):
 
 
 
-##if st.button('Get Audio Book'):
-##    # pdf to audio
-##    audio_model = replicate.models.get("afiaka87/tortoise-tts")
-##    audio_version = audio_model.versions.get("e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71")
-##    reader = PdfReader("dummy.pdf")
-##    text = ""
-##    for page in reader.pages:
-##        text += page.extract_text() + "\n" 
-##    output = audio_version.predict(text=text)
-##    st.audio(output, format='audio/ogg')
