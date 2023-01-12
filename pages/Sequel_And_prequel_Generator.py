@@ -15,6 +15,24 @@ import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+import re
+from PIL import Image 
+import PIL 
+import urllib.request
+import cv2
+import torch
+import torchaudio
+import torch.nn as nn
+import torch.nn.functional as F
+
+import IPython
+import pydub
+from pydub import AudioSegment
+from pydub.playback import play
+import moviepy.editor as mp
+
+from tortoise.api import TextToSpeech
+from tortoise.utils.audio import load_audio, load_voice, load_voices
 
 
 #function for getting transcription of audio from youtube video
@@ -87,7 +105,9 @@ cover_pdf = PDF()
 foreword_pdf = PDF()
 summary_pdf = PDF()
 
-
+import replicate
+midj_model = replicate.models.get("tstramer/midjourney-diffusion")
+midj_version = midj_model.versions.get("436b051ebd8f68d23e83d22de5e198e0995357afef113768c20f0b6fcef23c8b")
 
 st.title('Get Sequel/Prequel of your favourite Story')
 st.text('''
@@ -174,7 +194,8 @@ complete_text =''
 ## PDF Body
 completed = False
 if st.button('Get PDF'):
-    st.write('Good things take time :), Processing...')
+    st.write('Writing Your Storyy.')
+    st.markdown("![Writing Your Story](https://media.giphy.com/media/YAnpMSHcurJVS/giphy.gif)")
 
     text = []
     response = chatbot.ask( f"Generate {chapters} chapter titles for the story {st.session_state.title}")
@@ -272,14 +293,87 @@ if completed:
     )
 
 
+# if st.button('Get Audio Book'):
 
-##if st.button('Get Audio Book'):
-##    # pdf to audio
-##    audio_model = replicate.models.get("afiaka87/tortoise-tts")
-##    audio_version = audio_model.versions.get("e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71")
-##    reader = PdfReader("dummy.pdf")
-##    text = ""
-##    for page in reader.pages:
-##        text += page.extract_text() + "\n" 
-##    output = audio_version.predict(text=text)
-##    st.audio(output, format='audio/ogg')
+
+#     file = open("chapter0.txt", "r")
+#     doclist = [ line for line in file ]
+#     docstr = '' . join(doclist)
+#     sentences = re.split(r'[.!?]', docstr)
+
+#     for i in range(len(sentences)):
+#         output = midj_version.predict(prompt=sentences[i])
+#         urllib.request.urlretrieve(output[0], f"images/image{i}.jpg")
+
+
+#     def generate_video():
+#         image_folder = 'images' # Use the folder
+#         video_name = 'mygeneratedvideo.avi'
+#         os.chdir("videos")
+#         images = [img for img in os.listdir(image_folder) if img.endswith(".jpg") or
+#                 img.endswith(".jpeg") or img.endswith("png")]
+    
+#         fourcc = cv2.VideoWriter_fourcc(*'DIVX') 
+
+#         # Array images should only consider 
+#         # the image files ignoring others if any 
+        
+#         frame = cv2.imread(os.path.join(image_folder, images[0]))
+        
+#         # setting the frame width, height width 
+#         # the width, height of first image 
+#         height, width, layers = frame.shape
+
+#         video = cv2.VideoWriter(video_name, fourcc, 0.15, (width, height))
+
+#         # Appending the images to the video one by one 
+#         for image in images:
+#             video.write(cv2.imread(os.path.join(image_folder,image)))
+            
+#         # Deallocating memories taken for window creation 
+#         cv2.destroyAllWindows()
+#         video.release()  # releasing the video generated 
+        
+#     generate_video()
+
+
+#     tts = TextToSpeech()
+
+#     text = sentences
+
+#     # Pick a "preset mode" to determine quality. Options: {"ultra_fast", "fast" (default), "standard", "high_quality"}. See docs in api.py
+#     preset = "fast"
+
+#     voice = 'train_dotrice'
+
+#     # Load it and send it through Tortoise.
+#     voice_samples, conditioning_latents = load_voice(voice)
+#     for i in range(len(sentences)):
+#         gen = tts.tts_with_preset(sentences[i], voice_samples=voice_samples, conditioning_latents=conditioning_latents, preset=preset)
+#         torchaudio.save(f'generated{i}.wav', gen.squeeze(0).cpu(), 24000)
+
+
+
+#     sound1 = AudioSegment.from_wav("tortoise-tts/generated0.wav")
+
+#     for i in range(0,len(sentences)-1):
+#         sound2 = AudioSegment.from_wav(f"tortoise-tts/generated{i+1}.wav")
+#         combined = sound1 + sound2
+#         sound1 = combined
+
+#     combined.export("combined.wav", format="wav")
+
+
+#     sound = pydub.AudioSegment.from_wav("tortoise-tts/combined.wav")
+#     sound.export("tortoise-tts/combined.mp3", format="mp3")
+
+
+#     clip = mp.VideoFileClip('videos/mygeneratedvideo.avi')
+#     clip.write_videofile('videos/mygeneratedvideo.mp4')
+
+
+#     audio = mp.AudioFileClip('tortoise-tts/combined.mp3')
+#     video = mp.VideoFileClip('videos/mygeneratedvideo.mp4')
+#     final_video = video.set_audio(audio)
+
+#     final_video.write_videofile("output_video.mp4")
