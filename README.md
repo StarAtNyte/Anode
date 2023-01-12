@@ -16,8 +16,11 @@ Anode has two sections.
 
 **2. Generate a Novel**
        In this section, you can enter a title for a novel and Anode will generate the whole book.
-
-The end result of both sections is a novel book with a cover page and pictures for each chapter. Happy Reading!
+       
+**3. Generate a Bed Time Story**
+       In this section, you can enter a title for a bed time story and a moral and Anode will generate the whole book.
+       
+       
 
 
 
@@ -28,7 +31,7 @@ The end result of both sections is a novel book with a cover page and pictures f
 ## Instructions for Installation
 
 #### > Clone the repo
-#### > Open setup.py folder and write your openAI email and password in the config section
+#### > Open setup.py folder and write your openAI email and password in the config section and 2captcha api_key
 #### > Get the session token from openAI as shown in the image below
 
 <img width="1280" alt="image" src="https://user-images.githubusercontent.com/67851367/206921511-3b1e5085-b411-4397-8e78-88950bde5ae7.png">
