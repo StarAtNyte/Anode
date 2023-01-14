@@ -36,7 +36,7 @@ Anode has two sections.
 
 <img width="1280" alt="image" src="https://user-images.githubusercontent.com/67851367/206921511-3b1e5085-b411-4397-8e78-88950bde5ae7.png">
 
-#### > Paste the token
+#### > Paste the token in setup.py along with your email and password
 #### > install requirements.txt
 #### > run: streamlit run main_page.py
 
