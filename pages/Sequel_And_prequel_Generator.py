@@ -294,7 +294,7 @@ if completed:
         btn=st.download_button(
         label="⬇️ Download PDF",
         data=file,
-        file_name=f"{st.session_state.title}.pdf",
+        file_name="book.pdf",
         mime="application/octet-stream"
     )
 
