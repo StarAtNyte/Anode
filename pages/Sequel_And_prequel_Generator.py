@@ -17,15 +17,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 import openai
 
- 
-openai.api_key = "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"
-# Environment Variable for Replicate
-os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
-
-stability_api = client.StabilityInference(
-    key='sk-FMO2lOKk4jwqehIGpDxfnxFt5ctfkKWcEtaZCXMxiKC1UmKT',
-    verbose=True,
-)
+openai.api_key = "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"
 
 #function for getting transcription of audio from youtube video
 def get_transcript(link):
@@ -84,6 +76,13 @@ def get_transcript(link):
 
 
 
+# Environment Variable for Replicate
+os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
+
+stability_api = client.StabilityInference(
+    key='sk-D32IvqLxlRBfl40mix3QVTfEcWkANId4slFtRkuB1VTJOujb', 
+    verbose=True,
+)
 # PDF Object
 pdf = PDF()
 cover_pdf = PDF()
@@ -197,7 +196,7 @@ if st.button('Get PDF'):
     chaps = response['choices'][0]['text'].rsplit('\n')
     #response = chatbot.ask( f"Generate {chapters} chapter titles for the story {st.session_state.title}")
     #chaps= response['message'].rsplit("\n")
-    
+    chaps = [chap for chap in chaps if chap != '']
 
     for i in range(1,chapters+1):
         response = openai.Completion.create(
