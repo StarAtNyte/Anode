@@ -12,13 +12,15 @@ import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+import openai
 
-
+ 
+openai.api_key = "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"
 # Environment Variable for Replicate
 os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
 
 stability_api = client.StabilityInference(
-    key='sk-D32IvqLxlRBfl40mix3QVTfEcWkANId4slFtRkuB1VTJOujb', 
+    key='sk-FMO2lOKk4jwqehIGpDxfnxFt5ctfkKWcEtaZCXMxiKC1UmKT',
     verbose=True,
 )
 # PDF Object
@@ -83,9 +85,12 @@ if st.button('Get Cover Image'):
                 title_font = ImageFont.truetype('playfair/playfair-font.ttf', 35)
                 author_font = ImageFont.truetype('playfair/playfair-font.ttf', 20)
                 title_text = f"{st.session_state.title}"
+                words_in_title = title_text.split(' ')
                 if ':' in title_text:
                     temp = title_text.split(':')
-                    title_text = temp[0] + '\n' + temp[1]
+                    title_text = temp[0] + '\t\t\n' + temp[1]
+                if len(words_in_title) >4:
+                    title_text = words_in_title[0:4] + '\t\n' + words_in_title[4:]
                 image_editable = ImageDraw.Draw(image)
                 w, h = image_editable.textsize(st.session_state.title)
                 image_editable.text(((W-w)/3.7,25), title_text, (237, 230, 211), font=title_font)
@@ -108,15 +113,32 @@ if st.button('Get PDF'):
     st.markdown("![Writing Your Story](https://media.giphy.com/media/YAnpMSHcurJVS/giphy.gif)")
 
     text = []
-    response = chatbot.ask( f"Generate {paragraphs} paragraph titles for the children bedtime story {st.session_state.title}\
-        with moral {st.session_state.moral}")
-    chaps= response['message'].rsplit("\n")
+    response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt= f"Generate {paragraphs} paragraph titles for the children bedtime story {st.session_state.title} with moral {st.session_state.moral}",
+                    max_tokens = 100,
+                    temperature=0.6
+                )
+
+    chaps = response['choices'][0]['text'].rsplit('\n')
+    chaps = [chap for chap in chaps if chap != '']
     
 
     for i in range(1,paragraphs+1):
-        response = chatbot.ask( f"generate a paragraph for paragraph {i-1}: {chaps[i-1]}")
+        response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt= f"generate a paragraph for paragraph {i-1}: {chaps[i-1]}",
+                    max_tokens = 100,
+                    temperature=0.6
+                )
         if response['message'][0:2] == "In":
-            response = chatbot.ask( f"generate a paragraph for paragraph {i}")
+            response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt= f"generate a paragraph for paragraph {i}",
+                    max_tokens = 100,
+                    temperature=0.6
+                )
+
         text.append(response['message'])
         complete_text += text[0]
 
@@ -198,3 +220,13 @@ if completed:
 
 
 
+##if st.button('Get Audio Book'):
+##    # pdf to audio
+##    audio_model = replicate.models.get("afiaka87/tortoise-tts")
+##    audio_version = audio_model.versions.get("e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71")
+##    reader = PdfReader("dummy.pdf")
+##    text = ""
+##    for page in reader.pages:
+##        text += page.extract_text() + "\n" 
+##    output = audio_version.predict(text=text)
+##    st.audio(output, format='audio/ogg')
