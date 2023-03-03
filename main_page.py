@@ -16,7 +16,7 @@ from PIL import ImageFont
 import openai
 
  
-openai.api_key = "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"
+openai.api_key = "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"
 # Environment Variable for Replicate
 os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
 
