@@ -120,7 +120,7 @@ generate_title = st.button('Generate the title')
 if generate_title:
     response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt= f'Generate title for {preq_seq} of the following story: {st.session_state.story}',
+                prompt= f'Generate only 5 words title for {preq_seq} of the following story: {st.session_state.story}',
                 temperature=0.6
             )
     response = response['choices'][0]['text']
