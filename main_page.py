@@ -110,9 +110,7 @@ if st.button('Get PDF'):
     #response = chatbot.ask(f"Generate 10 chapter titles for the novel {title}")
     #chaps= response['message'].rsplit("\n")
     chaps = response['choices'][0]['text'].rsplit('\n')
-    chaps = [chap for chap in chaps if chap != '']
-    print(chaps)
-    
+    chaps = [chap for chap in chaps if chap != '']    
 
     for i in range(1,chapters+1):
         #response = chatbot.ask(f"generate content for chapter {i}")
