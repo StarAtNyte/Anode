@@ -17,7 +17,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 import openai
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 #function for getting transcription of audio from youtube video
 def get_transcript(link):
