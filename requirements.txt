@@ -11,3 +11,5 @@ opencv-python
 pydub
 moviepy
 torchaudio
+openai
+
