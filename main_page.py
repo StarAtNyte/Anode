@@ -1,4 +1,4 @@
-from setup import chatbot
+#from setup import chatbot
 from pdf import PDF
 import streamlit as st
 import textwrap
@@ -13,14 +13,15 @@ import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+import openai
 
  
-
+openai.api_key = "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"
 # Environment Variable for Replicate
 os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
 
 stability_api = client.StabilityInference(
-    key='sk-D32IvqLxlRBfl40mix3QVTfEcWkANId4slFtRkuB1VTJOujb', 
+    key='sk-FMO2lOKk4jwqehIGpDxfnxFt5ctfkKWcEtaZCXMxiKC1UmKT',
     verbose=True,
 )
 # PDF Object
@@ -32,6 +33,7 @@ summary_pdf = PDF()
 
 
 st.title('Create A Illustrated Novel From a simple Title')
+st.image("https://imageio.forbes.com/blogs-images/bernardmarr/files/2019/03/AdobeStock_235115918-1200x800.jpeg?format=jpg&width=1200")
 st.text('''
 Please follow the following instructions:
 1. Press all the buttons in order.
@@ -94,21 +96,33 @@ if st.button('Get Cover Image'):
 # Number of chapters
 chapters = st.number_input('Enter Number of chapters.', min_value=1, max_value=100, value=2, step=1)
 
-complete_text =''
 ## PDF Body
 if st.button('Get PDF'):
-    st.write('Writing Your Storyy.')
-    st.markdown("![Writing Your Story](https://media.giphy.com/media/YAnpMSHcurJVS/giphy.gif)")
+    st.write('Processing')
 
     text = []
-    response = chatbot.ask( f"Generate 10 chapter titles for the novel {title}")
-    chaps= response['message'].rsplit("\n")
+    response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt=f"Generate {chapters} chapter titles for the novel {title}",
+                    max_tokens = 100,
+                    temperature=0.6
+                )
+    #response = chatbot.ask(f"Generate 10 chapter titles for the novel {title}")
+    #chaps= response['message'].rsplit("\n")
+    chaps = response['choices'][0]['text'].rsplit('\n')
+    chaps = [chap for chap in chaps if chap != '']
+    print(chaps)
     
 
     for i in range(1,chapters+1):
-        response = chatbot.ask( f"generate content for chapter {i}")
-        text.append(response['message'])
-        complete_text += text[0]
+        #response = chatbot.ask(f"generate content for chapter {i}")
+        response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=f"generate content for chapter {i} :{chaps[i-1][4:-1]} of the novel titled {title}",
+                max_tokens = 300,
+                temperature=0.6
+            )
+        text.append(response['choices'][0]['text'])
 
     # Text to TXT
     for i in range(0, chapters):
@@ -146,7 +160,7 @@ if st.button('Get PDF'):
                 image.save(f"{chaps[i-1][4:-1]}.jpg")
                 
         
-        pdf.print_chapter(i, f"{chaps[i][4:-1]}", f'chapter{i}.txt')
+        pdf.print_chapter(i, f"{chaps[i-1][4:-1]}", f'chapter{i}.txt')
         pdf.image(f"{chaps[i-1][4:-1]}.jpg",x= 10, w=190, h = 80)
     pdf.output('dummy.pdf', 'F')
     
@@ -165,8 +179,14 @@ if st.button('Get PDF'):
     #summary_pdf.output(f'about_{title}.pdf', 'F')
     
     #Foreword generation
-    foreword_response = chatbot.ask( f"write foreword for the book written by you on the title {title}, in the style of an experienced writer, 400 words")
-    foreword = "FOREWORD\n\n\n\n" + foreword_response['message']
+    #foreword_response = chatbot.ask( f"write foreword for the book written by you on the title {title}, in the style of an experienced writer, 400 words")
+    foreword_response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=f"write foreword for the book written by you on the title {title}, in the style of an experienced writer, 400 words",
+                max_tokens = 300,
+                temperature=0.6
+            )
+    foreword = "FOREWORD\n\n\n\n" + foreword_response['choices'][0]['text']
     
     with open (f'foreword.txt', 'w') as file:  
             file.write(foreword)
@@ -195,3 +215,13 @@ if st.button('Get PDF'):
 
 
 
+##if st.button('Get Audio Book'):
+##    # pdf to audio
+##    audio_model = replicate.models.get("afiaka87/tortoise-tts")
+##    audio_version = audio_model.versions.get("e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71")
+##    reader = PdfReader("dummy.pdf")
+##    text = ""
+##    for page in reader.pages:
+##        text += page.extract_text() + "\n" 
+##    output = audio_version.predict(text=text)
+##    st.audio(output, format='audio/ogg')
