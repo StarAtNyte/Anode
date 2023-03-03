@@ -5,7 +5,6 @@ replicate
 PyPDF2
 stability-sdk
 youtube_dl
---force-reinstall https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
 requests
 setuptools
 
