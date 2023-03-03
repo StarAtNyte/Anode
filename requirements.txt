@@ -1,3 +1,4 @@
+openai
 revChatGPT
 fpdf
 replicate
@@ -6,10 +7,5 @@ stability-sdk
 youtube_dl
 requests
 setuptools
-imageio==2.4.1
-opencv-python
-pydub
-moviepy
-torchaudio
-openai
+
 
