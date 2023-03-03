@@ -79,7 +79,7 @@ def get_transcript(link):
 os.environ["REPLICATE_API_TOKEN"] = "b3ea4715f5e3450de2093c2c82fd224208a069e3"
 
 stability_api = client.StabilityInference(
-    key='sk-D32IvqLxlRBfl40mix3QVTfEcWkANId4slFtRkuB1VTJOujb', 
+    key='sk-FMO2lOKk4jwqehIGpDxfnxFt5ctfkKWcEtaZCXMxiKC1UmKT', 
     verbose=True,
 )
 # PDF Object
